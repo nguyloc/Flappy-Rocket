@@ -4,8 +4,10 @@ using UnityEngine.SceneManagement;
 public class CollisionHandler : MonoBehaviour
 {
     [SerializeField] float delayLoadLevel = 2f;
-    [SerializeField] AudioClip success;
-    [SerializeField] AudioClip crash;
+    [SerializeField] AudioClip successSFX;
+    [SerializeField] AudioClip crashSFX;
+    [SerializeField] ParticleSystem successParticles;
+    [SerializeField] ParticleSystem crashParticles;
     
     AudioSource _audioSource;
     
@@ -46,21 +48,23 @@ public class CollisionHandler : MonoBehaviour
     // This method starts the success sequence, which loads the next level after a delay.
     void StartSuccessSequence()
     {
-        isControllable = false;                         // Disable player control.
-        _audioSource.Stop();                            // Stop any currently playing audio.
-        _audioSource.PlayOneShot(success);              // Play success sound effect.
-        GetComponent<Movement>().enabled = false;       // Disable movement script to stop player control.
-        Invoke(nameof(LoadNextLevel), delayLoadLevel);  //delay before loading the next level.
+        isControllable = false;                                     // Disable player control.
+        _audioSource.Stop();                                        // Stop any currently playing audio.
+        _audioSource.PlayOneShot(successSFX);                       // Play success sound effect.
+        successParticles.Play();                                    // Play success particle effect.
+        GetComponent<Movement>().enabled = false;                   // Disable movement script to stop player control.
+        Invoke(nameof(LoadNextLevel), delayLoadLevel);              // delay before loading the next level.
     }
 
     // This method starts the crash sequence, which reloads the level after a delay.
     void StartCrashSequence()
     {
-        isControllable = false;                         // Disable player control.
-        _audioSource.Stop();                            // Stop any currently playing audio.
-        _audioSource.PlayOneShot(crash);                // Play crash sound effect.
-        GetComponent<Movement>().enabled = false;       // Disable movement script to stop player control.
-        Invoke(nameof(ReloadLevel), delayLoadLevel);    // delay before reloading the level.
+        isControllable = false;                         
+        _audioSource.Stop();                            
+        _audioSource.PlayOneShot(crashSFX);             
+        crashParticles.Play();
+        GetComponent<Movement>().enabled = false;       
+        Invoke(nameof(ReloadLevel), delayLoadLevel);    
     }
 
     // This method reloads the current level.
