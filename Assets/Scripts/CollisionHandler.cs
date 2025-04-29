@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
     
 public class CollisionHandler : MonoBehaviour
@@ -12,17 +13,35 @@ public class CollisionHandler : MonoBehaviour
     AudioSource _audioSource;
     
     bool isControllable = true;
+    bool isCollidable = true;
     
     private void Start()
     {
         _audioSource = GetComponent<AudioSource>();
     }
+
+    private void Update()
+    {
+        RespondToDebugKeys();
+    }
     
+    void RespondToDebugKeys()
+    {
+        if (Keyboard.current.lKey.wasPressedThisFrame)
+        {
+            LoadNextLevel();
+        }
+        else if (Keyboard.current.cKey.wasPressedThisFrame)
+        {
+            isControllable = !isControllable;
+        }
+    }
+
     // This script handles collision events for the player ship.
     // It checks for collisions with different objects and handles them accordingly.
     private void OnCollisionEnter(Collision other)
     {
-        if (!isControllable) return;
+        if (!isControllable || !isCollidable) return;
             
         // Check the tag of the object we collided with.
         switch (other.gameObject.tag)
