@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
     
 public class CollisionHandler : MonoBehaviour
 {
@@ -20,8 +21,14 @@ public class CollisionHandler : MonoBehaviour
                 break;
             
             default:
-                Debug.Log("Unknown collision detected.");
+                ReloadLevel();
                 break;
+        }
+
+        void ReloadLevel()
+        {
+            int currentScene = SceneManager.GetActiveScene().buildIndex;
+            SceneManager.LoadScene(currentScene);
         }
     }
 }
